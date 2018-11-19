@@ -10,6 +10,11 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should not get index" do
+    get courses_url
+    assert_response :success
+  end
+
   test "should get new" do
     get new_course_url
     assert_response :success
@@ -18,6 +23,14 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
   test "should create course" do
     assert_difference('Course.count') do
       post courses_url, params: { course: { code: @course.code, title: @course.title } }
+    end
+
+    assert_redirected_to course_url(Course.last)
+  end
+
+  test "should not create course" do
+    assert_difference('Course.count') do
+      post courses_url, params: { course: { code: '121', title: @course.title } }
     end
 
     assert_redirected_to course_url(Course.last)
