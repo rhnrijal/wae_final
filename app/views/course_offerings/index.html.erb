@@ -23,7 +23,7 @@
         <td><%= course_offering.course.code %></td>
 
         <td><%= link_to 'Show', course_offering %></td>
-
+        <td><%= link_to 'Register', registration_courses_url %></td>
         <td><%= link_to 'Edit', edit_course_offering_path(course_offering) %></td>
         <td><%= link_to 'Destroy', course_offering, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
