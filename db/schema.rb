@@ -10,10 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_19_085927) do
+ActiveRecord::Schema.define(version: 2018_11_19_093149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "course_offerings", force: :cascade do |t|
+    t.integer "year"
+    t.string "semester"
+    t.bigint "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_offerings_on_course_id"
+  end
+
+  create_table "courses", force: :cascade do |t|
+    t.string "code"
+    t.string "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "registration_courses", force: :cascade do |t|
+    t.string "grade"
+    t.bigint "user_id"
+    t.bigint "course_offering_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_offering_id"], name: "index_registration_courses_on_course_offering_id"
+    t.index ["user_id"], name: "index_registration_courses_on_user_id"
+  end
+
+  create_table "registrations", force: :cascade do |t|
+    t.string "grade"
+    t.bigint "user_id"
+    t.bigint "course_offering_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_offering_id"], name: "index_registrations_on_course_offering_id"
+    t.index ["user_id"], name: "index_registrations_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -27,4 +63,9 @@ ActiveRecord::Schema.define(version: 2018_11_19_085927) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "course_offerings", "courses"
+  add_foreign_key "registration_courses", "course_offerings"
+  add_foreign_key "registration_courses", "users"
+  add_foreign_key "registrations", "course_offerings"
+  add_foreign_key "registrations", "users"
 end
